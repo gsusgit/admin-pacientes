@@ -6,11 +6,11 @@ import { ref, reactive } from 'vue'
 const pacientes = ref([])
 
 const paciente = reactive({
-  mascota: 'Once',
-  propietario: 'Jesus',
-  email: 'jesus@gmail.com',
-  alta: '08-31-2024',
-  sintomas: 'Le pica la barriga',
+  mascota: '',
+  propietario: '',
+  email: '',
+  alta: '',
+  sintomas: '',
 })
 
 const agregarPaciente = () => {
