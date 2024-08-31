@@ -47,6 +47,12 @@
     if (Object.values(props).includes('')) {
       alerta.mensaje = 'Todos los campos son obligatorios'
       alerta.tipo = 'error'
+      setTimeout(() => {
+        Object.assign(alerta, {
+          tipo: '',
+          mensaje: ''
+        })
+      }, 2000)
       return
     }
     emits('agregar-paciente')
