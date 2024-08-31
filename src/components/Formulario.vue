@@ -1,60 +1,73 @@
 <script setup>
-import { reactive } from 'vue'
-import Alerta from './Alerta.vue'
+  import { reactive, computed } from 'vue'
+  import Alerta from './Alerta.vue'
 
-const emits = defineEmits([
-  'update:mascota',
-  'update:propietario',
-  'update:email',
-  'update:alta',
-  'update:sintomas',
-  'agregar-paciente'
-])
+  const emits = defineEmits([
+    'update:mascota',
+    'update:propietario',
+    'update:email',
+    'update:alta',
+    'update:sintomas',
+    'agregar-paciente'
+  ])
 
-const props = defineProps({
-  mascota: {
-    type: String,
-    required: true
-  },
-  propietario: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  alta: {
-    type: String,
-    required: true
-  },
-  sintomas: {
-    type: String,
-    required: true
+  const props = defineProps({
+    id: {
+      type: [String, null],
+      required: true
+    },
+    mascota: {
+      type: String,
+      required: true
+    },
+    propietario: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true
+    },
+    alta: {
+      type: String,
+      required: true
+    },
+    sintomas: {
+      type: String,
+      required: true
+    }
+  })
+
+  const alerta = reactive({
+    tipo: '',
+    mensaje: ''
+  })
+
+  const validar = () => {
+    if (Object.values(props).includes('')) {
+      alerta.mensaje = 'Todos los campos son obligatorios'
+      alerta.tipo = 'error'
+      return
+    }
+    emits('agregar-paciente')
+    alerta.mensaje = 'Datos guardados correctamente'
+    alerta.tipo = 'exito'
+    setTimeout(() => {
+      Object.assign(alerta, {
+        tipo: '',
+        mensaje: ''
+      })
+    }, 2000)
   }
-})
 
-const alerta = reactive({
-  tipo: '',
-  mensaje: ''
-})
-
-const validar = () => {
-  if (Object.values(props).includes('')) {
-    alerta.mensaje = 'Todos los campos son obligatorios'
-    alerta.tipo = 'error'
-    return
-  }
-  emits('agregar-paciente')
-  alerta.mensaje = 'Cita registrada correctemente'
-  alerta.tipo = 'exito'
-}
+  const editando = computed(() => {
+    return props.id
+  })
 </script>
 
 <template>
   <div class="md:w-1/2">
-    <h2 class="font-bold text-3xl text-center font-sans">Seguimiento pacientes</h2>
-    <p class="text-lg mt-5 text-center mb-10">Añade pacientes y <span class="text-indigo-600 font-bold">adminístralos</span></p>
+    <p class="text-lg mt-5 text-center mb-10">Añade pacientes y <span class="text-indigo-600 font-bold">Adminístralos</span></p>
     <form
         class="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
         @submit.prevent="validar"
@@ -144,7 +157,7 @@ const validar = () => {
       <input
           type="submit"
           class="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
-          value="Registrar paciente"
+          :value="[editando ? 'Actualizar paciente' : 'Alta paciente']"
       />
     </form>
   </div>
